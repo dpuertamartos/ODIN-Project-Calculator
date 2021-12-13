@@ -83,8 +83,17 @@ when you click the number buttons… you should be storing
     displayValue = Number(display.textContent)
  }
 
+ const clearDisplay = () => {
+    const display = document.querySelector(".display")
+    display.textContent = ""
+    displayValue = undefined
+ }
+
  const digitButtons = document.querySelectorAll(".digit-button")
  digitButtons.forEach(button => button.addEventListener("click", ()=>changeDisplay(button.id)))
+
+ const clearButton = document.querySelector("#clear")
+ clearButton.addEventListener("click", ()=>clearDisplay())
 
 /*  Make the calculator work! You’ll need to store the first number that is input 
  into the calculator when a user presses an operator, 
