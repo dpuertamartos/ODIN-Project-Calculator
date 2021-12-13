@@ -131,7 +131,7 @@ const playKey = (e) =>{
             case 106:
                 prepareOperation("*")
                 return ;
-            case 101:
+            case 111:
                 prepareOperation("/")
                 return ;
             case 40: 
