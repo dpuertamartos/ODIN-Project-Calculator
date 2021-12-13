@@ -1,15 +1,26 @@
-.container{
-    display: flex;
-    flex-direction: column;
+.display{
+    text-align: end;
+    color: greenyellow;
+    height: 50px;
+}
+
+.calculator{
+    margin: 25px auto auto auto;
+}
+
+.container-fluid{
+    max-width: 400px;
+}
+
+.instructions{
+    max-width: 400px;
+    text-align: left;
+}
+
+.icontainer{
+    padding: 3% 0% 0% 2%;
 }
 
 .row{
-    display: flex;
-}
-
-.display{
-    text-align: end;
-    background-color: black;
-    color: greenyellow;
-    padding: 1% 1%;
+    padding: 0%;
 }
