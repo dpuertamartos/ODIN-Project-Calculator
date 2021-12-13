@@ -1,54 +1,46 @@
+// Calculator functions to use in operate 
+
 const add = function() {
     let result = 0
     for(let i=0;i<arguments.length;i++){
       result = result + arguments[i]
     }
     return result
-  };
+  }
   
-  const subtract = function() {
+const subtract = function() {
     return arguments[0] - arguments[1]
-  };
+}
   
-  const sum = function() {
+const sum = function() {
     let result = 0
     for(let i=0;i<arguments.length;i++){
       result = result + arguments[i]
     }
     return result
-  };
+}
   
-  const multiply = function() {
+const multiply = function() {
     let result = 1
     for(let i=0;i<arguments.length;i++){
       result = result * arguments[i]
     }
     return result
-  };
+}
   
-  const power = function() {
+const power = function() {
     return arguments[0]**arguments[1]
-  };
+}
   
-  const factorial = function(number) {
+const factorial = function(number) {
     let result = 1
     for(let i=number; i>0; i--){
       result = i * result
     }
       return result
-  };
+}
 
-/* Your calculator is going to contain functions for all 
-of the basic math operators you typically find on simple calculators, 
-so start by creating functions for the following items and testing them in your browser’s console.
-add
-subtract
-multiply
-divide */
-
-/* 
-Create a new function operate that takes 
-an operator and 2 numbers and then calls one of the above functions on the numbers. */
+// higher order operate function to use calculator functions
 
 const operate = (operator, n1, n2) => {
     switch(operator){
@@ -63,58 +55,99 @@ const operate = (operator, n1, n2) => {
     }
 }
 
-console.log(operate("-", 2, 3))
+// store of calculator values
 
-/* Create a basic HTML calculator with buttons for each digit, 
-each of the above functions and an “Equals” key.
-Do not worry about wiring up the JS just yet.
-There should also be a display for the calculator, 
-go ahead and fill it with some dummy numbers so you can get it looking right.
-Add a “clear” button. */
+let displayValue = undefined
+let number1 = undefined
+let operatorSaved = undefined
+let result = undefined
 
-/* Create the functions that populate the display 
-when you click the number buttons… you should be storing
- the ‘display value’ in a variable somewhere for use in the next step. */
- let displayValue = undefined
+const display = document.querySelector(".display")
 
- const changeDisplay= (id) => {
-    const display = document.querySelector(".display")
+const changeDisplay= (id) => {
     display.textContent += id
     displayValue = Number(display.textContent)
- }
+}
 
- const clearDisplay = () => {
-    const display = document.querySelector(".display")
+const delCharacter= () =>{
+    display.textContent = display.textContent.slice(0,-1)
+    displayValue = Number(display.textContent)
+}
+
+const clearDisplay = () => {
     display.textContent = ""
     displayValue = undefined
- }
+}
 
- const digitButtons = document.querySelectorAll(".digit-button")
- digitButtons.forEach(button => button.addEventListener("click", ()=>changeDisplay(button.id)))
+// after pressing an operator this function stores the operator and the previous number
 
- const clearButton = document.querySelector("#clear")
- clearButton.addEventListener("click", ()=>clearDisplay())
+const prepareOperation = (operator) => {
+    number1 = displayValue
+    operatorSaved = operator
+    clearDisplay()
+}
 
-/*  Make the calculator work! You’ll need to store the first number that is input 
- into the calculator when a user presses an operator, 
- and also save which operation has been chosen and then operate() 
- on them when the user presses the “=” key.
-You should already have the code that can populate the display, 
-so once operate() has been called, update the display with the ‘solution’ to the operation.
-This is the hardest part of the project. You need to figure out how to store 
-all the values and call the operate function with them. 
-Don’t feel bad if it takes you a while to figure out the logic. */
 
-/* Gotchas: watch out for and fix these bugs if they show up in your code:
-Users should be able to string together several operations and get the right answer, with each pair of numbers being evaluated at a time. For example, 12 + 7 - 5 * 3 = should yield 42. An example of the behavior we’re looking for would be this student solution. Your calculator should not evaluate more than a single pair of numbers at a time. If you enter a number then an operator and another number that calculation should be displayed if your next input is an operator. The result of the calculation should be used as the first number in your new calculation.
-You should round answers with long decimals so that they don’t overflow the screen.
-Pressing = before entering all of the numbers or an operator could cause problems!
-Pressing “clear” should wipe out any existing data.. make sure the user is really starting fresh after pressing “clear”
-Display a snarky error message if the user tries to divide by 0… don’t let it crash your calculator! */
+function toFixedIfNecessary( value, dp ){
+    return +parseFloat(value).toFixed( dp )
+} 
 
-/* EXTRA CREDIT: Users can get floating point numbers if they do the math required to get one, 
-but they can’t type them in yet. Add a . button and let users input decimals! Make sure you don’t let them type more than one though: 12.3.56.5. It is hard to do math on these numbers. (disable the decimal button if there’s already one in the display)
-EXTRA CREDIT: Make it look nice! This can be a good portfolio project… but not if it’s UGLY. 
-At least make the operations a different color from the keypad buttons.
-EXTRA CREDIT: Add a “backspace” button, so the user can undo if they click the wrong number.
-EXTRA CREDIT: Add keyboard support! */
+const finalizeOperation = () =>{
+    result = toFixedIfNecessary(operate(operatorSaved,number1,displayValue),3)
+    number1=undefined
+    operatorSaved=undefined
+    display.textContent = ""
+    display.textContent = result
+    displayValue = result
+    console.log(result)
+}
+
+const digitButtons = document.querySelectorAll(".digit-button")
+digitButtons.forEach(button => button.addEventListener("click", ()=>changeDisplay(button.id)))
+
+const clearButton = document.querySelector("#clear")
+clearButton.addEventListener("click", ()=>clearDisplay())
+
+const operateButtons = document.querySelectorAll(".operate-button")
+operateButtons.forEach(button => button.addEventListener("click", ()=>prepareOperation(button.id)))
+
+const resultButton = document.querySelector(".result-button")
+resultButton.addEventListener("click", ()=>finalizeOperation())
+
+const delButton = document.querySelector(".delete-button")
+delButton.addEventListener("click", ()=>delCharacter())
+
+const playKey = (e) =>{
+    console.log(e.keyCode)
+    const buttonToPress = document.querySelector(`button[data-key="${e.keyCode}"]`) 
+    if(!buttonToPress) {
+        switch(e.keyCode){
+            case 107:
+                prepareOperation("+")
+                return ;
+            case 109:
+                prepareOperation("-")
+                return ;
+            case 106:
+                prepareOperation("*")
+                return ;
+            case 101:
+                prepareOperation("/")
+                return ;
+            case 40: 
+                finalizeOperation()
+                return ;
+            case 8: 
+                delCharacter()
+                return ;
+            case 37: 
+                clearDisplay()
+                return ;    
+            default: return ;
+        }
+    } 
+    buttonToPress.click()
+}
+
+window.addEventListener('keydown', playKey)
+
