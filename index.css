@@ -1,0 +1,15 @@
+.container{
+    display: flex;
+    flex-direction: column;
+}
+
+.row{
+    display: flex;
+}
+
+.display{
+    text-align: end;
+    background-color: black;
+    color: greenyellow;
+    padding: 1% 1%;
+}

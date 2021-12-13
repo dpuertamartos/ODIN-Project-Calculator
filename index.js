@@ -75,6 +75,16 @@ Add a “clear” button. */
 /* Create the functions that populate the display 
 when you click the number buttons… you should be storing
  the ‘display value’ in a variable somewhere for use in the next step. */
+ let displayValue = undefined
+
+ const changeDisplay= (id) => {
+    const display = document.querySelector(".display")
+    display.textContent += id
+    displayValue = Number(display.textContent)
+ }
+
+ const digitButtons = document.querySelectorAll(".digit-button")
+ digitButtons.forEach(button => button.addEventListener("click", ()=>changeDisplay(button.id)))
 
 /*  Make the calculator work! You’ll need to store the first number that is input 
  into the calculator when a user presses an operator, 
